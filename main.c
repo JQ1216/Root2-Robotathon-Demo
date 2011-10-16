@@ -33,20 +33,6 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-/*#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#define CFG_USBCDC
-
-#include "projectconfig.h"
-#include "sysinit.h"
-
-#include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
-*/
-
-/**************************************************************************/
 /*! 
     @file     main.c
     @author   Robby Nevels, Cruz Monrreal, Stephen Hall, Frank Weng, Razik Ahmed
@@ -67,6 +53,7 @@
 #include "core/i2c/i2c.h"
 #include "core/adc/adc.h"
 
+#include "modules/linesensor/linesensor.h"
 
 
 typedef enum { ENCODER_0, ENCODER_1 } encoder_t;	// encoder data type
@@ -85,7 +72,6 @@ int getString(char* buf, int len);
 void waitForKey();
 char getKey();
 void moveServo(int servo, int degree);
-int readLineSensor(int LineSensor[8]);
 int getIRValue(int channel);
 void setMotorDuty(int motor, int power);
 signed long getEncoderValue(encoder_t enc);
@@ -144,9 +130,6 @@ Begin: Low-level functions and definitions
 */
 /**************************************************************************/
 
-//leftshifting 1 for space for R/W bit
-#define ADS7830_ADDR (0x48 << 1)
-#define READ_BIT 1
 
 #define UARTBUFFERSIZE 5
 
@@ -256,10 +239,6 @@ void initServos()
 
   /* Enable Timer1 */
   TMR_TMR32B1TCR = TMR_TMR32B1TCR_COUNTERENABLE_ENABLED;
-}
-
-void initLineSensor(void) {
-	i2cInit(I2CMASTER);
 }
 
 void initIR(void) {
@@ -417,42 +396,6 @@ void moveServo(int servo, int degree) {
 		TMR_TMR32B1MR2 = TIMER32_CCLK_10US * period; 
 }
 
-// Grabs line sensor data using i2c and dumps into LineSensor array. 
-// Returns 1 if successful, 0 if encountered a timeout error 
-//	(timeout probably means the line sensor isn't connected correctly)
-int readLineSensor(int LineSensor[8]) {
-	int i;
-	char cmd;
-	
-	gpioSetValue(2, 10, 1);
-	for(i=0; i<I2C_BUFSIZE; i++) //clear i2c buffers
-	{
-		I2CMasterBuffer[i] = 0;
-		I2CSlaveBuffer[i] = 0;
-	}
-	
-	cmd = 0x84; //1 CH# 01 XX for request conversion. e.g 1 000 01 00 is for channel 2
-	
-	for(i=0; i<I2C_BUFSIZE; i++)
-	{
-		////printf("Reading channel %d\n\r", i);
-		I2CWriteLength = 2;
-		I2CReadLength = 1;
-		I2CMasterBuffer[0] = ADS7830_ADDR;
-		I2CMasterBuffer[1] = cmd; 
-		cmd += 0x10; //increment channel
-		I2CMasterBuffer[2] = ADS7830_ADDR | READ_BIT; //not included in writelength b/c its a repeated start
-		int timeout = i2cEngine(); //run the transaction and waits for value to be read back
-		if (timeout > MAX_TIMEOUT) {
-			//printf("ERROR: timeout (device not connected correctly)\n\r");
-			return 0;
-		}
-		LineSensor[i] = I2CSlaveBuffer[0] > 100 ? 999 : 0; //sadly after each transaction the RdIndex is returned to 0, could change i2c driver...
-	} 
-	
-	return 1;
-}
-
 // Gets the value at the ADC requested channel
 int getIRValue(int channel) {
 	int indexes[] = {0, 1, 6, 7};
@@ -572,7 +515,7 @@ void IRDemo() {
 void lineSensorDemo() {
 	char intro[] = "\n\rWelcome to the line sensor demo!\n\r\
 		Choose an option:\n\rspace - get reading\n\rq - quit\n\r";
-	int lineSensorArr[8];
+	short lineSensorArr[8];
 	int count = 0, quit = 0;
 	
 	printf("%s", intro);
@@ -625,44 +568,3 @@ void encoderDemo() {
 End: Useful functions
 */
 /**************************************************************************/
-
-
-
-
-
-
-
-/**************************************************************************/
-/*! 
-    Main program entry point.  After reset, normal code execution will
-    begin here.
-*/
-/**************************************************************************/
-/*int main(void)
-{
-  // Configure cpu and mandatory peripherals
-  systemInit();
-
-  uint32_t currentSecond, lastSecond;
-  currentSecond = lastSecond = 0;
-
-  while (1)
-  {
-    // Toggle LED once per second ... rollover = 136 years :)
-    currentSecond = systickGetSecondsActive();
-    if (currentSecond != lastSecond)
-    {
-      lastSecond = currentSecond;
-      if (gpioGetValue(CFG_LED_PORT, CFG_LED_PIN) == CFG_LED_OFF)
-      {
-        gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_ON); 
-      }
-      else
-      {
-        gpioSetValue (CFG_LED_PORT, CFG_LED_PIN, CFG_LED_OFF); 
-      }
-    }
-  }
-
-  return 0;
-}*/

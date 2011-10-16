@@ -377,4 +377,20 @@ monitor reg pc = (0x00000004)
       </AdditionalRules>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="modules">
+    <VirtualDirectory Name="linesensor">
+      <File Name="../../modules/linesensor/linesensor.c"/>
+      <File Name="../../modules/linesensor/linesensor.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="robot">
+      <File Name="../../modules/robot/encoder.c"/>
+      <File Name="../../modules/robot/encoder.h"/>
+      <File Name="../../modules/robot/ir.c"/>
+      <File Name="../../modules/robot/ir.h"/>
+      <File Name="../../modules/robot/motor.c"/>
+      <File Name="../../modules/robot/motor.h"/>
+      <File Name="../../modules/robot/servo.c"/>
+      <File Name="../../modules/robot/servo.h"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
 </CodeLite_Project>

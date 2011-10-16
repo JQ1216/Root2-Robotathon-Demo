@@ -116,6 +116,13 @@ OBJS += wdt.o cdcuser.o cdc_buf.o usbcore.o usbdesc.o usbhw.o usbuser.o
 OBJS += sysinit.o pwm.o iap.o
 
 ##########################################################################
+# Module files 
+##########################################################################
+
+VAPTH += modules modules/linesensor
+OBJS += linesensor.o 
+
+##########################################################################
 # GNU GCC compiler prefix and location
 ##########################################################################
 
@@ -134,7 +141,7 @@ CP = cp
 # GNU GCC compiler flags
 ##########################################################################
 ROOT_PATH = .
-INCLUDE_PATHS = -I$(ROOT_PATH) -I$(ROOT_PATH)/project
+INCLUDE_PATHS = -I$(ROOT_PATH) -I$(ROOT_PATH)/project -I$(ROOT_PATH)/modules/linesensor
 
 ##########################################################################
 # Startup files
