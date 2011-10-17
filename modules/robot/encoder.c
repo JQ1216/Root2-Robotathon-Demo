@@ -1,4 +1,3 @@
-
 #include "projectconfig.h"
 #include "sysinit.h"
 
@@ -7,27 +6,20 @@
 #include "core/i2c/i2c.h"
 #include "core/adc/adc.h"
 
+#include "encoder.h"
 
-/* begin encoder code */
-/* Move typedefs into header when sorting code 
- * Also recommending same typedef style for all other aspects of this project */
-typedef enum { ENCODER_0, ENCODER_1 } encoder_t;	// encoder data type
-typedef signed long encoder_count_t;				// encoder count type
-typedef enum { s_0, s_1, s_2, s_3 }  encoder_state_t;
 const int enc_Machine[4][4] = { { 0 , 1 , -1 , 0 } , {-1 , 0 , 0 , 1 } , { 1 , 0 , 0 , -1 } , { 0 , -1 , 1 , 0 } }; 
-volatile static encoder_count_t enc_0, enc_1;
 volatile static encoder_state_t enc_state[2];
-          
-void initEncoders(void) {
+volatile static encoder_count_t enc_0, enc_1;
+
+void initEncoders() {
 	/*written as psedocode until actual values can be set*/
 	/* Configure Encoder Pins 3 block (4 pins) as input */
 	
-	/***  <THIS CODE IS STALLING THE uC!>  ***/
 	enc_state[0] = s_0 ;
 	enc_state[1] = s_0 ;
 	enc_0 = 0;
 	enc_1 = 0;
-	/***  </THIS CODE IS STALLING THE uC!>  ***/
 	
 	//gpioInit();	// Already initialized in cpuInit() (yeah, strange.)
 	gpioSetDir(3, 0, gpioDirection_Input);
@@ -71,8 +63,7 @@ void encoderDrive( encoder_t enc )
 	} 
 }
 
-void encoderIntHandler(void){
-	//printf("interrupt fire!");
+void encoderIntHandler(){
   if ( gpioIntStatus(3, 0) ){
 	  encoderDrive( ENCODER_0 );
 	  gpioIntClear(3, 0);

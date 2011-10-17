@@ -132,16 +132,13 @@ void PIOINT2_IRQHandler(void)
 /**************************************************************************/
 void PIOINT3_IRQHandler(void)
 {
-	/* Do the state machine here*/
-  if ( gpioIntStatus(3, 0) ){
-	  gpioIntClear(3, 0);
-  }else if ( gpioIntStatus(3, 1) ){
-	  gpioIntClear(3, 1);
-  }else if ( gpioIntStatus(3, 2) ){
-	  gpioIntClear(3, 2);
-  }else if ( gpioIntStatus(3, 3) ){
-	  gpioIntClear(3, 3);
-  }
+  uint32_t regVal;
+
+  regVal = gpioIntStatus(3, 1);
+  if ( regVal )
+  {
+    gpioIntClear(3, 1);
+  }		
   return;
 }
 

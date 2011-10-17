@@ -1,3 +1,6 @@
+#include "projectconfig.h"
+#include "core/i2c/i2c.h"
+
 #include "linesensor.h"
 
 void initLineSensor()
@@ -28,9 +31,9 @@ int readLineSensor(short data[])
 	{
 		I2CWriteLength = 2;
 		I2CReadLength = 1;
-		I2CMasterBuffer[0] = ADS7830_ADDR;
+		I2CMasterBuffer[0] = ADS7830;
 		I2CMasterBuffer[1] = cmd; 
-		I2CMasterBuffer[2] = ADS7830_ADDR | 1;
+		I2CMasterBuffer[2] = ADS7830 | 1;
 		
 		cmd += 0x10;	// Increment Channel to read
 		
@@ -38,7 +41,7 @@ int readLineSensor(short data[])
 		{	
 			return 0;
 		}
-		LineSensor[i] = I2CSlaveBuffer[0]; //sadly after each transaction the RdIndex is returned to 0, could change i2c driver...
+		data[i] = I2CSlaveBuffer[0]; //sadly after each transaction the RdIndex is returned to 0, could change i2c driver...
 	} 
 	
 	// Clean the buffer after use

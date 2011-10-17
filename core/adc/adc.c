@@ -193,21 +193,21 @@ void adcInit (void)
                               IOCON_JTAG_TMS_PIO1_0_FUNC_MASK |
                               IOCON_JTAG_TMS_PIO1_0_MODE_MASK);
   IOCON_JTAG_TMS_PIO1_0 |=   (IOCON_JTAG_TMS_PIO1_0_FUNC_AD1 &
-                              IOCON_JTAG_TMS_PIO1_0_ADMODE_ANALOG); 
-							  
-  /* Set AD6 to analog input */
-  IOCON_PIO1_10 &=  		    ~(IOCON_PIO1_10_ADMODE_MASK |
-                              IOCON_PIO1_10_FUNC_MASK |
-                              IOCON_PIO1_10_MODE_MASK);
-	IOCON_PIO1_10 |=          (IOCON_PIO1_10_FUNC_AD6 &
-                              IOCON_PIO1_10_ADMODE_ANALOG);
+                              IOCON_JTAG_TMS_PIO1_0_ADMODE_ANALOG);
 
-  /* Set AD7 to analog input */
-	IOCON_PIO1_11 &= 		      ~(IOCON_PIO1_11_ADMODE_MASK |
-                              IOCON_PIO1_11_FUNC_MASK |
-                              IOCON_PIO1_11_MODE_MASK);
-	IOCON_PIO1_11 |=           (IOCON_PIO1_11_FUNC_AD7 &
-                              IOCON_PIO1_11_ADMODE_ANALOG);
+  /* Set AD2 to analog input */
+  IOCON_JTAG_TDO_PIO1_1 &=  ~(IOCON_JTAG_TDO_PIO1_1_ADMODE_MASK |
+                              IOCON_JTAG_TDO_PIO1_1_FUNC_MASK |
+                              IOCON_JTAG_TDO_PIO1_1_MODE_MASK);
+  IOCON_JTAG_TDO_PIO1_1 |=   (IOCON_JTAG_TDO_PIO1_1_FUNC_AD2 &
+                              IOCON_JTAG_TDO_PIO1_1_ADMODE_ANALOG);
+
+  /* Set AD3 to analog input */
+  IOCON_JTAG_nTRST_PIO1_2 &= ~(IOCON_JTAG_nTRST_PIO1_2_ADMODE_MASK |
+                               IOCON_JTAG_nTRST_PIO1_2_FUNC_MASK |
+                               IOCON_JTAG_nTRST_PIO1_2_MODE_MASK);
+  IOCON_JTAG_nTRST_PIO1_2 |=  (IOCON_JTAG_nTRST_PIO1_2_FUNC_AD3 &
+                               IOCON_JTAG_nTRST_PIO1_2_ADMODE_ANALOG);
 
   /* Note that in SW mode only one channel can be selected at a time (AD0 in this case)
      To select multiple channels, ADC_AD0CR_BURST_HWSCANMODE must be used */

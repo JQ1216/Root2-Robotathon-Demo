@@ -67,8 +67,6 @@ void PIOINT1_IRQHandler(void)   WEAK_ALIAS(irq_undefined);
 void PIOINT0_IRQHandler(void)   WEAK_ALIAS(irq_undefined);
 void WAKEUP_IRQHandler(void)    WEAK_ALIAS(irq_undefined);
 
-extern void encoderIntHandler(void);
-
 /*****************************************************************************
  * Forward undefined fault handlers to an infinite loop function. The Handlers
  * are weakly aliased which means that (re)definitions will overide these.
@@ -179,7 +177,7 @@ const void *vectors[] SECTION(".irq_vectors") =
   WDT_IRQHandler,        // WDT (Watchdog Timer)
   BOD_IRQHandler,        // BOD (Brownout Detect)
   FMC_IRQHandler,        // Flash (IP2111 Flash Memory Controller)
-  encoderIntHandler,     // PIO INT3
+  PIOINT3_IRQHandler,    // PIO INT3
   PIOINT2_IRQHandler,    // PIO INT2
   PIOINT1_IRQHandler,    // PIO INT1
   PIOINT0_IRQHandler,    // PIO INT0
