@@ -42,6 +42,6 @@
 #include "projectconfig.h"
 
 uint32_t   adcRead (uint8_t channelNum);
-void  adcInit (void);
+void  adcInit ( char );
 
 #endif

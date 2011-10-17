@@ -6,25 +6,25 @@
     <TabInfo>
       <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\main.c" Name="FileName"/>
       <int Value="26" Name="FirstVisibleLine"/>
-      <int Value="44" Name="CurrentLine"/>
+      <int Value="26" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
     <TabInfo>
-      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\projectconfig.h" Name="FileName"/>
-      <int Value="118" Name="FirstVisibleLine"/>
-      <int Value="127" Name="CurrentLine"/>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\core\adc\adc.c" Name="FileName"/>
+      <int Value="181" Name="FirstVisibleLine"/>
+      <int Value="195" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
     <TabInfo>
-      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\core\pwm\pwm.c" Name="FileName"/>
-      <int Value="58" Name="FirstVisibleLine"/>
-      <int Value="60" Name="CurrentLine"/>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\lpc134x.h" Name="FileName"/>
+      <int Value="1797" Name="FirstVisibleLine"/>
+      <int Value="1800" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
     <TabInfo>
-      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\core\pwm\pwm.h" Name="FileName"/>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\core\adc\adc.h" Name="FileName"/>
       <int Value="25" Name="FirstVisibleLine"/>
-      <int Value="42" Name="CurrentLine"/>
+      <int Value="44" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
   </TabInfoArray>
