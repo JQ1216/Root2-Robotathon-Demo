@@ -42,14 +42,7 @@
 
 #include "modules/robot/motor.h"
 
-/**************************************************************************/
-/*! 
-    Main program entry point.  After reset, normal code execution will
-    begin here.
-*/
-/**************************************************************************/
-int main(void){
-	initMotors();
+int main(){
 	
 	while(1);
 	

@@ -39,6 +39,9 @@
 
 #include "projectconfig.h"
 
+#define CFG_PWM_DEFAULT_PULSEWIDTH  (CFG_CPU_CCLK / 1000)
+#define CFG_PWM_DEFAULT_DUTYCYCLE   (50)
+
 void pwmInit( void );
 void pwmStart( void );
 void pwmStop( void );
