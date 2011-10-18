@@ -45,8 +45,122 @@
 
 #include "adc.h"
 
-static bool _adcInitialised = false;
+static short _adcInitialised = 0x00;
 static uint8_t _adcLastChannel = 0;
+
+
+/**************************************************************************/
+/*! 
+    @brief      Initialises the A/D converter and configures desired channels
+                for 10-bit, SW-controlled A/D conversion.
+
+    @return     Nothing
+*/
+/**************************************************************************/
+void adcInit (char pins)
+{
+  // Disable Power down bit to the ADC block
+  SCB_PDRUNCFG &= ~(SCB_PDRUNCFG_ADC);
+
+  // Enable AHB clock to the ADC
+  SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_ADC);
+  
+  if (pins & 0x01){ // Set AD0 to Analog Input
+    IOCON_JTAG_TDI_PIO0_11 &= ~(IOCON_JTAG_TDI_PIO0_11_ADMODE_MASK |
+                                IOCON_JTAG_TDI_PIO0_11_FUNC_MASK |
+                                IOCON_JTAG_TDI_PIO0_11_MODE_MASK);
+    IOCON_JTAG_TDI_PIO0_11 |=  (IOCON_JTAG_TDI_PIO0_11_FUNC_AD0 &
+                                IOCON_JTAG_TDI_PIO0_11_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x01;
+  }
+
+  if (pins & 0x02){ // Set AD1 to Analog Input
+    IOCON_JTAG_TMS_PIO1_0 &=  ~(IOCON_JTAG_TMS_PIO1_0_ADMODE_MASK |
+                                IOCON_JTAG_TMS_PIO1_0_FUNC_MASK |
+                                IOCON_JTAG_TMS_PIO1_0_MODE_MASK);
+    IOCON_JTAG_TMS_PIO1_0 |=   (IOCON_JTAG_TMS_PIO1_0_FUNC_AD1 &
+                                IOCON_JTAG_TMS_PIO1_0_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x02;
+  }
+
+  if (pins & 0x04){ // Set AD2 to Analog Input
+    IOCON_JTAG_TDO_PIO1_1 &=  ~(IOCON_JTAG_TDO_PIO1_1_ADMODE_MASK |
+                                IOCON_JTAG_TDO_PIO1_1_FUNC_MASK |
+                                IOCON_JTAG_TDO_PIO1_1_MODE_MASK);
+    IOCON_JTAG_TDO_PIO1_1 |=   (IOCON_JTAG_TDO_PIO1_1_FUNC_AD2 &
+                                IOCON_JTAG_TDO_PIO1_1_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x04;
+  }
+
+  if (pins & 0x08){ // Set AD3 to Analog Input
+    IOCON_JTAG_nTRST_PIO1_2 &= ~(IOCON_JTAG_nTRST_PIO1_2_ADMODE_MASK |
+                                 IOCON_JTAG_nTRST_PIO1_2_FUNC_MASK |
+                                 IOCON_JTAG_nTRST_PIO1_2_MODE_MASK);
+    IOCON_JTAG_nTRST_PIO1_2 |=  (IOCON_JTAG_nTRST_PIO1_2_FUNC_AD3 &
+                                 IOCON_JTAG_nTRST_PIO1_2_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x08;
+  }
+
+  if (pins & 0x10){ // Set AD4 to Analog Input
+    IOCON_SWDIO_PIO1_3 &= ~(IOCON_SWDIO_PIO1_3_ADMODE_MASK |
+                            IOCON_SWDIO_PIO1_3_FUNC_MASK);      // Might not work. Missing MODE_MASK
+    IOCON_SWDIO_PIO1_3 |=  (IOCON_SWDIO_PIO1_3_FUNC_AD4 &
+                            IOCON_SWDIO_PIO1_3_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x10;
+  }
+  if (pins & 0x20){ // Set AD5 to Analog Input
+    IOCON_PIO1_4 &= ~(IOCON_PIO1_4_ADMODE_MASK |
+                      IOCON_PIO1_4_FUNC_MASK |
+                      IOCON_PIO1_4_MODE_MASK);
+    IOCON_PIO1_4 |=  (IOCON_PIO1_4_FUNC_AD5 &
+                      IOCON_PIO1_4_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x20;
+  }
+  
+  if (pins & 0x40){ // Set AD6 to Analog Input
+    IOCON_PIO1_10 &= ~(IOCON_PIO1_10_ADMODE_MASK |
+                       IOCON_PIO1_10_FUNC_MASK |
+                       IOCON_PIO1_10_MODE_MASK);
+    IOCON_PIO1_10 |=  (IOCON_PIO1_10_FUNC_AD6 &
+                       IOCON_PIO1_10_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x40;
+  }
+  
+  if (pins & 0x80){ // Set AD7 to Analog Input
+    IOCON_PIO1_11 &= ~(IOCON_PIO1_11_ADMODE_MASK |
+                       IOCON_PIO1_11_FUNC_MASK |
+                       IOCON_PIO1_11_MODE_MASK);
+    IOCON_PIO1_11 |=  (IOCON_PIO1_11_FUNC_AD7 &
+                       IOCON_PIO1_11_ADMODE_ANALOG);
+    
+    _adcInitialised |= 0x80;
+  }
+
+
+  /* Note that in SW mode only one channel can be selected at a time (AD0 in this case)
+     To select multiple channels, ADC_AD0CR_BURST_HWSCANMODE must be used */
+  ADC_AD0CR = (ADC_AD0CR_SEL_AD0 |                     /* SEL=1,select channel 0 on ADC0 */
+              (((CFG_CPU_CCLK / SCB_SYSAHBCLKDIV) / 1000000 - 1 ) << 8) |   /* CLKDIV = Fpclk / 1000000 - 1 */ 
+              ADC_AD0CR_BURST_SWMODE |                 /* BURST = 0, no BURST, software controlled */
+              ADC_AD0CR_CLKS_10BITS |                  /* CLKS = 0, 11 clocks/10 bits */
+              ADC_AD0CR_START_NOSTART |                /* START = 0 A/D conversion stops */
+              ADC_AD0CR_EDGE_RISING);                  /* EDGE = 0 (CAP/MAT signal falling, trigger A/D conversion) */ 
+
+  /* Set initialisation flag */
+  _adcInitialised = true;
+
+  /* Set last channel flag to 0 (initialised above) */
+  _adcLastChannel = 0;
+
+  return;
+}
 
 /**************************************************************************/
 /*! 
@@ -57,21 +171,17 @@ static uint8_t _adcLastChannel = 0;
 
     @param[in]  channelNum
                 The A/D channel [0..7] that will be used during the A/D 
-                conversion.  (Note that only A/D channel's 0..3 are 
-                configured by default in adcInit.)
+                conversion.
 
     @return     0 if an overrun error occured, otherwise a 10-bit value
                 containing the A/D conversion results.
-    @warning    Only AD channels 0..3 are configured for A/D in adcInit.
-                If you wish to use A/D pins 4..7 they will also need to
-                be added to the adcInit function.
 */
 /**************************************************************************/
-uint32_t adcRead (uint8_t channelNum)
+uint32_t adcRead (char channelNum)
 {
   if (!_adcInitialised) adcInit(0xFF);
 
-  uint32_t regVal, adcData;
+  uint32_t regVal;
 
   /* make sure that channel number is 0..7 */
   if ( channelNum >= 8 )
@@ -87,8 +197,7 @@ uint32_t adcRead (uint8_t channelNum)
   ADC_AD0CR |= ADC_AD0CR_START_STARTNOW | (1 << channelNum);
 				
   /* wait until end of A/D convert */
-  while ( 1 )			
-  {
+  do {
     // Get data register results for the requested channel
     switch (channelNum)
     {
@@ -121,120 +230,19 @@ uint32_t adcRead (uint8_t channelNum)
         break;
     }
 
-    /* read result of A/D conversion */
-    if (regVal & ADC_DR_DONE)
-    {
-      break;
-    }
-  }
+    // Continue as read result of A/D conversion */
+  } while (!(regVal & ADC_DR_DONE));
 
-  /* stop ADC */
+  // Stop ADC
   ADC_AD0CR &= ~ADC_AD0CR_START_MASK;
 
   /* return 0 if an overrun occurred */
   if ( regVal & ADC_DR_OVERRUN )
   {
-    return (0);
+    return 0;
   }
 
   /* return conversion results */
-  adcData = (regVal >> 6) & 0x3FF;
-  return (adcData);
+  return (regVal >> 6) & 0x3FF;
 }
 
-/**************************************************************************/
-/*! 
-    @brief      Initialises the A/D converter and configures channels 0..3
-                for 10-bit, SW-controlled A/D conversion.
-
-    @return     Nothing
-*/
-/**************************************************************************/
-void adcInit (char pins)
-{
-  // Disable Power down bit to the ADC block
-  SCB_PDRUNCFG &= ~(SCB_PDRUNCFG_ADC);
-
-  // Enable AHB clock to the ADC
-  SCB_SYSAHBCLKCTRL |= (SCB_SYSAHBCLKCTRL_ADC);
-
-  
-  if (pins & 0x01){ // Set AD0 to Analog Input
-    IOCON_JTAG_TDI_PIO0_11 &= ~(IOCON_JTAG_TDI_PIO0_11_ADMODE_MASK |
-                                IOCON_JTAG_TDI_PIO0_11_FUNC_MASK |
-                                IOCON_JTAG_TDI_PIO0_11_MODE_MASK);
-    IOCON_JTAG_TDI_PIO0_11 |=  (IOCON_JTAG_TDI_PIO0_11_FUNC_AD0 &
-                                IOCON_JTAG_TDI_PIO0_11_ADMODE_ANALOG);
-  }
-
-  if (pins & 0x02){ // Set AD1 to Analog Input
-    IOCON_JTAG_TMS_PIO1_0 &=  ~(IOCON_JTAG_TMS_PIO1_0_ADMODE_MASK |
-                                IOCON_JTAG_TMS_PIO1_0_FUNC_MASK |
-                                IOCON_JTAG_TMS_PIO1_0_MODE_MASK);
-    IOCON_JTAG_TMS_PIO1_0 |=   (IOCON_JTAG_TMS_PIO1_0_FUNC_AD1 &
-                                IOCON_JTAG_TMS_PIO1_0_ADMODE_ANALOG);
-  }
-
-  if (pins & 0x04){ // Set AD2 to Analog Input
-    IOCON_JTAG_TDO_PIO1_1 &=  ~(IOCON_JTAG_TDO_PIO1_1_ADMODE_MASK |
-                                IOCON_JTAG_TDO_PIO1_1_FUNC_MASK |
-                                IOCON_JTAG_TDO_PIO1_1_MODE_MASK);
-    IOCON_JTAG_TDO_PIO1_1 |=   (IOCON_JTAG_TDO_PIO1_1_FUNC_AD2 &
-                                IOCON_JTAG_TDO_PIO1_1_ADMODE_ANALOG);
-  }
-
-  if (pins & 0x08){ // Set AD3 to Analog Input
-    IOCON_JTAG_nTRST_PIO1_2 &= ~(IOCON_JTAG_nTRST_PIO1_2_ADMODE_MASK |
-                                 IOCON_JTAG_nTRST_PIO1_2_FUNC_MASK |
-                                 IOCON_JTAG_nTRST_PIO1_2_MODE_MASK);
-    IOCON_JTAG_nTRST_PIO1_2 |=  (IOCON_JTAG_nTRST_PIO1_2_FUNC_AD3 &
-                                 IOCON_JTAG_nTRST_PIO1_2_ADMODE_ANALOG);
-  }
-
-  if (pins & 0x10){ // Set AD4 to Analog Input
-    IOCON_SWDIO_PIO1_3 &= ~(IOCON_SWDIO_PIO1_3_ADMODE_MASK |
-                            IOCON_SWDIO_PIO1_3_FUNC_MASK);      // Might not work. Missing MODE_MASK
-    IOCON_SWDIO_PIO1_3 |=  (IOCON_SWDIO_PIO1_3_FUNC_AD4 &
-                            IOCON_SWDIO_PIO1_3_ADMODE_ANALOG);
-  }
-  if (pins & 0x20){ // Set AD5 to Analog Input
-    IOCON_PIO1_4 &= ~(IOCON_PIO1_4_ADMODE_MASK |
-                      IOCON_PIO1_4_FUNC_MASK |
-                      IOCON_PIO1_4_MODE_MASK);
-    IOCON_PIO1_4 |=  (IOCON_PIO1_4_FUNC_AD5 &
-                      IOCON_PIO1_4_ADMODE_ANALOG);
-  }
-  if (pins & 0x40){ // Set AD6 to Analog Input
-    IOCON_PIO1_10 &= ~(IOCON_PIO1_10_ADMODE_MASK |
-                       IOCON_PIO1_10_FUNC_MASK |
-                       IOCON_PIO1_10_MODE_MASK);
-    IOCON_PIO1_10 |=  (IOCON_PIO1_10_FUNC_AD6 &
-                       IOCON_PIO1_10_ADMODE_ANALOG);
-  }
-  if (pins & 0x80){ // Set AD7 to Analog Input
-    IOCON_PIO1_11 &= ~(IOCON_PIO1_11_ADMODE_MASK |
-                       IOCON_PIO1_11_FUNC_MASK |
-                       IOCON_PIO1_11_MODE_MASK);
-    IOCON_PIO1_11 |=  (IOCON_PIO1_11_FUNC_AD7 &
-                       IOCON_PIO1_11_ADMODE_ANALOG);
-  }
-
-
-
-  /* Note that in SW mode only one channel can be selected at a time (AD0 in this case)
-     To select multiple channels, ADC_AD0CR_BURST_HWSCANMODE must be used */
-  ADC_AD0CR = (ADC_AD0CR_SEL_AD0 |                     /* SEL=1,select channel 0 on ADC0 */
-              (((CFG_CPU_CCLK / SCB_SYSAHBCLKDIV) / 1000000 - 1 ) << 8) |   /* CLKDIV = Fpclk / 1000000 - 1 */ 
-              ADC_AD0CR_BURST_SWMODE |                 /* BURST = 0, no BURST, software controlled */
-              ADC_AD0CR_CLKS_10BITS |                  /* CLKS = 0, 11 clocks/10 bits */
-              ADC_AD0CR_START_NOSTART |                /* START = 0 A/D conversion stops */
-              ADC_AD0CR_EDGE_RISING);                  /* EDGE = 0 (CAP/MAT signal falling, trigger A/D conversion) */ 
-
-  /* Set initialisation flag */
-  _adcInitialised = true;
-
-  /* Set last channel flag to 0 (initialised above) */
-  _adcLastChannel = 0;
-
-  return;
-}
