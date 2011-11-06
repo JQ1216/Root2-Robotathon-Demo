@@ -22,7 +22,7 @@ void clearI2CBuffer()
 // Grabs line sensor data using i2c and dumps into LineSensor array. 
 // Returns 1 if successful, 0 if encountered a timeout error 
 //	(timeout probably means the line sensor isn't connected correctly)
-int readLineSensor(short data[])
+int readLineSensor(char data[])
 {
 	int i;
 	char cmd = 0x84; //1 CH# 01 XX for request conversion. e.g 1 000 01 00 is for channel 2

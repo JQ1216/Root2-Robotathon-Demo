@@ -45,8 +45,8 @@
 
 #include "adc.h"
 
-static short _adcInitialised = 0x00;
-static uint8_t _adcLastChannel = 0;
+static char _adcInitialised = 0x00;
+static char _adcLastChannel = 0;
 
 
 /**************************************************************************/
@@ -177,11 +177,11 @@ void adcInit (char pins)
                 containing the A/D conversion results.
 */
 /**************************************************************************/
-uint32_t adcRead (char channelNum)
+short adcRead (char channelNum)
 {
   if (!_adcInitialised) adcInit(0xFF);
 
-  uint32_t regVal;
+  int regVal;
 
   /* make sure that channel number is 0..7 */
   if ( channelNum >= 8 )

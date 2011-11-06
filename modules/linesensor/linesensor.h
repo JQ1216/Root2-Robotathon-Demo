@@ -4,4 +4,4 @@ void initLineSensor( void );
 
 void clearI2CBuffer( void );
 
-int readLineSensor( short data[] );
+int readLineSensor( char data[] );
