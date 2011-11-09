@@ -1,8 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Session Name="C:\Users\Cruz Monrreal II\Desktop\Root2 Demo Project\build\codelite\LPC1343 Workspace.workspace">
-  <int Value="0" Name="m_selectedTab"/>
-  <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Demo Project\build\codelite\LPC1343 Workspace.workspace" Name="m_workspaceName"/>
-  <TabInfoArray Name="TabInfoArray"/>
+<Session Name="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\build\codelite\LPC1343 Workspace.workspace">
+  <int Value="4" Name="m_selectedTab"/>
+  <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\build\codelite\LPC1343 Workspace.workspace" Name="m_workspaceName"/>
+  <TabInfoArray Name="TabInfoArray">
+    <TabInfo>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\main.c" Name="FileName"/>
+      <int Value="26" Name="FirstVisibleLine"/>
+      <int Value="46" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\core\adc\adc.h" Name="FileName"/>
+      <int Value="20" Name="FirstVisibleLine"/>
+      <int Value="43" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\core\adc\adc.c" Name="FileName"/>
+      <int Value="163" Name="FirstVisibleLine"/>
+      <int Value="179" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\modules\linesensor\linesensor.c" Name="FileName"/>
+      <int Value="13" Name="FirstVisibleLine"/>
+      <int Value="24" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Cruz Monrreal II\Desktop\Root2 Skeleton\modules\linesensor\linesensor.h" Name="FileName"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="6" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+  </TabInfoArray>
   <SerializedObject Name="m_breakpoints">
     <long Value="0" Name="Count"/>
   </SerializedObject>
